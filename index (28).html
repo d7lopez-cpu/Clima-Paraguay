@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b1220">
+<title>Clima en Paraguay</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icono.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icono-192.png">
+<script>try{document.documentElement.dataset.tema=localStorage.getItem("clima-py-tema")==="claro"?"claro":"oscuro"}catch(e){}</script>
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<div class="contenedor">
+
+  <header>
+    <div class="marca">
+      <h1>🇵🇾 Clima en <span>Paraguay</span></h1>
+      <p class="sub"><span id="subtitulo"></span><span id="estado" class="pill carga">● Cargando…</span></p>
+      <div class="pref"><button id="btnTema" class="btn">☀️</button><button id="btnUnidad" class="btn">°C</button></div>
+    </div>
+    <div class="acciones">
+      <input id="buscador" type="search" placeholder="Buscar ciudad o lugar…" aria-label="Buscar ciudad" autocomplete="off">
+      <button id="btnLugar" title="Busca cualquier pueblo o barrio de Paraguay">🔎 Buscar lugar</button>
+      <button id="btnComparar" title="Comparar dos o tres ciudades">⚖️ Comparar</button>
+      <button id="btnUbicacion" title="Selecciona la ciudad más cercana a ti">📍 Cerca de mí</button>
+      <button id="btnActualizar">🔄 Actualizar</button>
+    </div>
+  </header>
+  <div id="lugares" class="lugares" hidden></div>
+
+  <section class="stats" id="stats" aria-label="Resumen nacional"></section>
+
+  <section class="tarjeta" id="detalle" aria-busy="true">
+    <div class="vacio">Cargando el clima…</div>
+  </section>
+
+  <section class="tarjeta" id="comparar" hidden aria-label="Comparar ciudades">
+    <div class="comp-barra">
+      <h2>⚖️ Comparar ciudades</h2>
+      <div id="compSel" class="comp-sel"></div>
+      <button id="compCerrar" class="btn" aria-label="Cerrar comparación">✕</button>
+    </div>
+    <div id="compRes"></div>
+  </section>
+
+  <main class="cuadricula">
+    <section class="tarjeta">
+      <div class="mapa-barra">
+        <div class="capas" id="capas" role="tablist" aria-label="Capa del mapa"></div>
+        <div class="zoom">
+          <button id="zMas" aria-label="Acercar">+</button>
+          <button id="zMenos" aria-label="Alejar">−</button>
+          <button id="zReset" aria-label="Ver todo el país" title="Ver todo el país">⟲</button>
+        </div>
+      </div>
+      <div class="mapa-contenedor" id="mapaCont">
+        <svg id="mapa" tabindex="0" role="group" aria-label="Mapa de Paraguay por departamentos. Usa + y - para el zoom y las flechas para moverte."></svg>
+        <div class="chip-sel" id="chipSel"></div>
+        <div class="pista" id="pista">Usa Ctrl + rueda para hacer zoom</div>
+        <div id="tooltip"></div>
+      </div>
+      <div class="reloj">
+        <button id="hPlay" class="btn" aria-label="Reproducir">▶</button>
+        <input id="hSlider" type="range" min="0" max="24" step="1" value="0" aria-label="Hora del pronóstico en el mapa">
+        <span id="hEtq" aria-live="polite">Ahora</span>
+      </div>
+      <div class="extras">
+        <button id="btnRadar" class="btn" title="Radar de lluvia de las últimas horas">📡 Radar</button>
+        <button id="btnRutas" class="btn" title="Rutas principales (aproximadas)">🛣️ Rutas</button>
+        <span id="radarEtq" class="ayuda"></span>
+      </div>
+      <div class="leyenda"><span id="legIni"></span><div class="grad" id="grad"></div><span id="legFin"></span></div>
+      <p class="ayuda">Ctrl + rueda o pellizca para zoom · arrastra para mover · toca un departamento para filtrar · con zoom se ven los distritos</p>
+    </section>
+
+    <section class="tarjeta lista-caja">
+      <div class="lista-wrap">
+        <h2>Ciudades <span id="contador"></span></h2>
+        <div class="lista-filtros">
+          <select id="filtroDep" aria-label="Filtrar por departamento"></select>
+          <select id="orden" aria-label="Ordenar ciudades">
+            <option value="nombre">Orden: nombre</option>
+            <option value="mayor">Mayor valor primero</option>
+            <option value="menor">Menor valor primero</option>
+          </select>
+        </div>
+        <div id="lista" role="list"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Datos del clima: <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo.com</a> ·
+    Límites: <a href="https://www.geoboundaries.org/" target="_blank" rel="noopener">geoBoundaries</a> y
+    <a href="https://www.naturalearthdata.com/" target="_blank" rel="noopener">Natural Earth</a> (dominio público)<br>
+    Se actualiza solo cada 30 minutos mientras la página está visible
+  </footer>
+</div>
+<div id="aviso" role="status"></div>
+<div id="anuncio" class="sr-only" aria-live="polite"></div>
+
+<script src="js/geo.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
